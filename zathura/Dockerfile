@@ -1,7 +1,5 @@
-FROM archlinux:latest
+FROM archlinux/base
 
 RUN pacman --noconfirm -Syyu
-RUN pacman --noconfirm -S zathura zathura-pdf-poppler diffpdf man
-
-CMD 'zathura'
+RUN pacman --noconfirm --needed -S zathura zathura-pdf-poppler diffpdf
 
