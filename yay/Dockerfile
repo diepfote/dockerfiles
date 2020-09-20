@@ -1,7 +1,7 @@
 FROM archlinux/base
 
 RUN pacman --noconfirm -Syyu
-RUN pacman --noconfirm -S --needed git vim man man-pages sudo base-devel pkgfile
+RUN pacman --noconfirm -S --needed git vi vim man man-pages sudo base-devel pkgfile
 #RUN pacman --noconfirm -S --needed xfce4
 
 # build man database
