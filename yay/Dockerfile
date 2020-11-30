@@ -2,9 +2,9 @@ FROM archlinux/base
 
 RUN pacman --noconfirm -Syyu
 
-# ldns includes drill
-RUN pacman --noconfirm -S --needed git vi vim man man-pages sudo base-devel pkgfile ldns
-#RUN pacman --noconfirm -S --needed xfce4
+# FYI: ldns includes drill
+RUN pacman --noconfirm -S --needed git vi vim man man-pages sudo \
+    base-devel pkgfile ldns
 
 # build man database
 RUN mandb
