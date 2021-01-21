@@ -3,7 +3,7 @@ FROM archlinux/base
 RUN pacman --noconfirm -Syyu
 
 # FYI: ldns includes drill
-RUN pacman --noconfirm -S --needed git vi vim man man-pages sudo \
+RUN pacman --noconfirm -S --needed git vi neovim man man-pages sudo \
     base-devel pkgfile ldns
 
 # build man database
