@@ -1,8 +1,11 @@
 FROM archlinux/base
 
+# disable space check in pacman
+RUN sed -i '/CheckSpace/d' /etc/pacman.conf
+
 # FYI: ldns includes drill
 RUN pacman --noconfirm -Syyu --needed git vi neovim man man-pages sudo \
-    base-devel pkgfile ldns
+                                      base-devel pkgfile ldns
 
 # build man database
 RUN mandb
