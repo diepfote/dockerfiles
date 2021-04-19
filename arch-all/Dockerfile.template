@@ -25,4 +25,6 @@ RUN sudo -u build-user git clone https://aur.archlinux.org/yay.git; cd yay; sudo
 # ----------
 #
 
-RUN pacman --noconfirm -Syyu --needed '{{ TEMPLATE }}'
+RUN pacman --noconfirm -Syyu --needed {{ internal_arch_pkgs }}
+RUN yay --noconfirm -Syu --needed {{ external_arch_pkgs }}
+
