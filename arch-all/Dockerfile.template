@@ -21,7 +21,9 @@ RUN pkgfile -u
 ADD sudoers /etc/sudoers
 RUN useradd -m -d /build build-user
 WORKDIR /build
-RUN sudo -u build-user git clone https://aur.archlinux.org/yay.git; cd yay; sudo -u build-user makepkg -sri --noconfirm
+COPY .bashrc /build/.bashrc
+
+RUN sudo -u build-user git clone https://aur.archlinux.org/yay.git && cd yay && sudo -u build-user makepkg -sri --noconfirm && cd - && rm -rf yay
 # ----------
 #
 
