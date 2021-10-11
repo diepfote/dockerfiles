@@ -4,7 +4,7 @@ FROM docker.io/archlinux:base
 RUN sed -i '/CheckSpace/d' /etc/pacman.conf
 
 # FYI: ldns includes drill
-RUN pacman --noconfirm -Syyu --needed git vi neovim man man-pages sudo \
+RUN pacman --noconfirm -Syu --needed git vi neovim man man-pages sudo \
                                       base-devel pkgfile ldns
 
 # build man database
