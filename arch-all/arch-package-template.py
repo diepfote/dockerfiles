@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import subprocess
 from jinja2 import Environment, FileSystemLoader
 
 
@@ -42,6 +43,15 @@ def item_included(item, exclusions):
     return True
 
 
+def docker_image_cached():
+    out = subprocess.check_output(['docker', 'images']).decode('utf-8')
+
+    for line in out.splitlines():
+        if 'arch-all' in line:
+            return True
+    return False
+
+
 tmp_split = []
 # print(f'{arch_pkgs=}')
 for item in arch_pkgs:
@@ -54,7 +64,30 @@ for item in arch_pkgs:
 arch_pkgs = tmp_split
 del tmp_split
 
+image = 'docker.io/archlinux:base'
+yay_install="""
+# ----------
+# yay cannot be run as root!
+#
+# taken from: https://github.com/justin8/docker-makepkg/blob/master/Dockerfile
+#
+ADD sudoers /etc/sudoers
+RUN useradd -m -d /build build-user || true
+WORKDIR /build
+COPY .bashrc /build/.bashrc
+RUN ln -s /build/.vim/vimrc /build/.vimrc || true
+
+RUN sudo -u build-user git clone https://aur.archlinux.org/yay.git && cd yay && sudo -u build-user makepkg -sri --noconfirm && cd - && rm -rf yay
+# ----------
+#
+"""
+
+if docker_image_cached():
+    yay_install = ''
+    image = 'localhost/arch-all'
 
 with open('Dockerfile', 'w') as f:
-    f.write(template.render( arch_pkgs=' '.join(arch_pkgs) ))
+    f.write(template.render(image=image,
+                            arch_pkgs=' '.join(arch_pkgs),
+                            yay_install=yay_install ))
 

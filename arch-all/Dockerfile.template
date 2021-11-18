@@ -1,4 +1,4 @@
-FROM docker.io/archlinux:base
+FROM {{ image }}
 
 # disable space check in pacman
 RUN sed -i '/CheckSpace/d' /etc/pacman.conf
@@ -13,20 +13,7 @@ RUN mandb
 # initialize pkgfile database
 RUN pkgfile -u
 
-# ----------
-# yay cannot be run as root!
-#
-# taken from: https://github.com/justin8/docker-makepkg/blob/master/Dockerfile
-#
-ADD sudoers /etc/sudoers
-RUN useradd -m -d /build build-user
-WORKDIR /build
-COPY .bashrc /build/.bashrc
-RUN ln -s /build/.vim/vimrc /build/.vimrc
-
-RUN sudo -u build-user git clone https://aur.archlinux.org/yay.git && cd yay && sudo -u build-user makepkg -sri --noconfirm && cd - && rm -rf yay
-# ----------
-#
+{{ yay_install }}
 
 RUN sudo -u build-user yay --noconfirm -Syu --needed {{ arch_pkgs }}
 
