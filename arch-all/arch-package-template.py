@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import subprocess
 from jinja2 import Environment, FileSystemLoader
+
+
+image_name=sys.argv[1]
+image_is_cached=True if sys.argv[2] == 'cached' else False
 
 
 # Load jinja template file
@@ -28,7 +33,7 @@ with open(filename_pkg_explicit_external) as f:
     del content
 
 filename_exclusions = os.environ['HOME'] \
-    + '/Documents/misc/arch/arch-all-docker-image-package-exclusions.txt'
+    + f'/Documents/misc/arch/{image_name}-docker-image-package-exclusions.txt'
 with open(filename_exclusions) as f:
     content = f.read()
     exclusions = content.split('\n')[:-1]
@@ -41,15 +46,6 @@ def item_included(item, exclusions):
         if item.startswith(exclusion):
             return False
     return True
-
-
-def docker_image_cached():
-    out = subprocess.check_output(['docker', 'images']).decode('utf-8')
-
-    for line in out.splitlines():
-        if 'arch-all' in line:
-            return True
-    return False
 
 
 tmp_split = []
@@ -82,9 +78,9 @@ RUN sudo -u build-user git clone https://aur.archlinux.org/yay.git && cd yay && 
 #
 """
 
-if docker_image_cached():
+if image_is_cached:
     yay_install = ''
-    image = 'localhost/arch-all'
+    image = f'localhost/{image_name}'
 
 with open('Dockerfile', 'w') as f:
     f.write(template.render(image=image,
