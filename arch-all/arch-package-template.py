@@ -70,8 +70,6 @@ yay_install="""
 ADD sudoers /etc/sudoers
 RUN useradd -m -d /build build-user || true
 WORKDIR /build
-COPY .bashrc /build/.bashrc
-RUN ln -s /build/.vim/vimrc /build/.vimrc || true
 
 RUN sudo -u build-user git clone https://aur.archlinux.org/yay.git && cd yay && sudo -u build-user makepkg -sri --noconfirm && cd - && rm -rf yay
 # ----------

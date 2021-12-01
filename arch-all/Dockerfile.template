@@ -15,5 +15,10 @@ RUN pkgfile -u
 
 {{ yay_install }}
 
+# build-user created in yay_install
+COPY .bashrc /build/.bashrc
+RUN chown build-user:build-user /build/.bashrc
+RUN ln -s /build/.vim/vimrc /build/.vimrc || true
+
 RUN sudo -u build-user yay --noconfirm -Syu --needed {{ arch_pkgs }}
 
