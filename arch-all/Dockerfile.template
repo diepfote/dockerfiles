@@ -15,10 +15,28 @@ RUN pkgfile -u
 
 {{ yay_install }}
 
+
+# ------------
+# This section is required as lima  does not allow us to mount
+# the home directory read-write.
+#
 # build-user created in yay_install
-COPY .bashrc /build/.bashrc
+#
+
+COPY .bashrc /build/
 RUN chown build-user:build-user /build/.bashrc
+
+# gdb configs
+COPY .gdbinit .gef-startup /build/
+RUN chown build-user:build-user /build/.{gdbinit,gef-startup}
+
+COPY yay-config /build/.config/yay
+RUN chown build-user:build-user /build/.config/yay
+
 RUN ln -s /build/.vim/vimrc /build/.vimrc || true
 
-RUN sudo -u build-user yay --norebuild --noredownload --noconfirm -Syu --needed {{ arch_pkgs }}
+# ------------
+#
+
+RUN sudo -u build-user yay --noconfirm -Syu --needed {{ arch_pkgs }}
 

@@ -1,2 +1,9 @@
 Dockerfile
+
 .bashrc
+
+.gdbinit
+.gef-startup
+
+yay-config
+
