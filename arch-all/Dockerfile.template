@@ -26,6 +26,10 @@ RUN pkgfile -u
 COPY .bashrc /build/
 RUN chown build-user:build-user /build/.bashrc
 
+COPY .radare2rc /build/
+RUN chown build-user:build-user /build/.radare2rc
+RUN cd /build && ln -fs .radare2rc .rizinrc
+
 # gdb configs
 COPY .gdbinit .gef-startup /build/
 RUN chown build-user:build-user /build/.{gdbinit,gef-startup}

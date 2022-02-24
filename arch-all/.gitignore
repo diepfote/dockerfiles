@@ -2,6 +2,9 @@ Dockerfile
 
 .bashrc
 
+.rizinrc
+.radare2rc
+
 .gdbinit
 .gef-startup
 
