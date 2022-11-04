@@ -19,7 +19,7 @@ docker run \
   -v /var/cache/pkgfile:/var/cache/pkgfile \
   -v ~/.cache/yay:/build/.cache/yay \
   -v ~/.gnupg:/build/.gnupg \
-  -v ~/.container:/build/.container \
+  -v ~/.not_host_env:/build/.container \
   -v ~/Documents/config:/build/Documents/config:ro \
   -v ~/.vim:/build/.vim \
   -v ~/.config/coc:/build/.config/coc \
