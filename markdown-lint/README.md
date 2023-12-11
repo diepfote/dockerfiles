@@ -7,7 +7,7 @@ $ docker run -v "$PWD":/data -w /data --rm -it markdown-lint  bash
 root@55ce1d18ba8a:/data# find -name '*.md' -exec sh -c 'mdl "$0"' {} \;
 
 # or
-$ docker run -v "$PWD":/data -w /data --rm -it markdown-lint  find -name '*.md' -exec sh -c 'mdl "$0"' {} \;
+$ docker run -v "$PWD":/data -w /data --rm -it markdown-lint  mdl . 
 ...
 ./gif.md:12: MD009 Trailing spaces
 ./gif.md:16: MD012 Multiple consecutive blank lines
