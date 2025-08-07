@@ -2,7 +2,7 @@
 
 
 ```
-# docker run -w /data -v ~/Documents/diepfote.github.io/:/data -it localhost/markdown-toc bash
+# docker run -w /data -v ~/Repos/diepfote.github.io/:/data -it localhost/markdown-toc bash
 # TOP=1; for file in */*.md; do echo ---; echo "$file"; mdtoc.rb "$file" "$TOP"; done
 ```
 

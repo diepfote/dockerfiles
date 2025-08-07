@@ -9,7 +9,7 @@ shopt -s failglob  # error on unexpaned globs
 trap 'set +x' EXIT
 
 
-source ~/Documents/scripts/source-me/common-functions.sh
+source ~/Repos/scripts/source-me/common-functions.sh
 
 
 [ -z "$*" ] && command=(bash) || command=("$@")
@@ -34,8 +34,8 @@ docker run \
   -v /tmp:/tmp:ro \
   -v "$PWD":/pwd:ro \
   -w /pwd \
-  -v ~/Documents/books\&documentation:/books:ro \
-  -v ~/Documents/cheatsheets:/cheatsheets:ro \
+  -v ~/Repos/books\&documentation:/books:ro \
+  -v ~/Repos/cheatsheets:/cheatsheets:ro \
   -e DISPLAY="$DISPLAY" \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   --security-opt=no-new-privileges \

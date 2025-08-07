@@ -11,7 +11,7 @@ cleanup () {
   popd
 }
 trap cleanup EXIT
-pushd ~/Documents/dockerfiles/"$1"
+pushd ~/Repos/dockerfiles/"$1"
 
 
 build_opts=()
@@ -42,6 +42,15 @@ if [ "$1" = "$image_name" ]; then
 
   ./arch-package-template.py "$image_name" "$cache_status"
 
+  # @TODO `-v`/`--mount` no longer works in builds
+  # you need to use: --mount=type=cache
+  # It cannot be used (as a flag or option) with the docker build command directly.
+  # Instead, cache mounts are specified inside your Dockerfile as part of a RUN instruction,
+  # and only work when Docker BuildKit is enabled.
+  #
+  # Dockerfile:
+  # RUN --mount=type=cache,target=/path/to/cache-dir your-command
+  #
   # build_opts+=('-v' '/var/cache/pkgfile:/var/cache/host-pkgfile:ro' '-v' '/var/cache/pacman:/var/cache/host-pacman:ro' '--no-cache')
   build_opts+=('-v' '/var/cache/pkgfile:/var/cache/pkgfile' \
     '-v' '/var/cache/pacman:/var/cache/pacman' \
