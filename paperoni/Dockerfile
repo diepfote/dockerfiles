@@ -23,6 +23,7 @@ RUN mv paperoni /usr/local/bin/
 
 RUN mkdir /data
 RUN chown -R 1000:1000 /data
+USER 1000
 WORKDIR /data
 
 ENTRYPOINT ["paperoni"]
