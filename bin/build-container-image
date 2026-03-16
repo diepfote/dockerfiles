@@ -63,6 +63,10 @@ set -x
 docker build "${build_opts[@]}" -t "$1" .
 set +x
 
+if [ "$(uname)" != Linux ]; then
+  docker tag "$1":latest localhost/"$1":latest
+fi
+
 if [ "$1" = arch-all ]; then
   set -x
   rm "$tar_image" || true
