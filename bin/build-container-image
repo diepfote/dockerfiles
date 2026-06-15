@@ -6,41 +6,12 @@ set -e  # exit on non-zero return value
 #set -f  # disable globbing/filename expansion
 shopt -s failglob  # error on unexpaned globs
 
-cleanup () {
-  rm -r .bashrc .radare2rc .gdbinit .gef-startup yay-config
-  popd
-}
+cleanup () { set +x; }
 trap cleanup EXIT
-pushd ~/Repos/dockerfiles/"$1"
 
+(
+  cd ~/Repos/dockerfiles/"$1"
 
-build_opts=()
-
-set -x
-image_name=arch-all
-if [ "$1" = "$image_name" ]; then
-  set -x
-
-  cp ~/.{bash,radare2}rc .
-  # gdb configs
-  cp ~/.gdbinit .gdbinit
-  cp ~/.gef-startup .gef-startup
-  cp -r ~/.config/yay yay-config
-
-
-  tar_image="$image_name".tar
-  cache_status=cached
-
-  if ! docker images | grep "$image_name" >/dev/null 2>&1; then
-    docker_image_name=localhost/"$image_name"
-
-    if ! docker load -i "$tar_image"; then
-      docker image rm "$docker_image_name" || true
-      cache_status=not-cached
-    fi
-  fi
-
-  ./arch-package-template.py "$image_name" "$cache_status"
 
   # @TODO `-v`/`--mount` no longer works in builds
   # you need to use: --mount=type=cache
@@ -52,24 +23,15 @@ if [ "$1" = "$image_name" ]; then
   # RUN --mount=type=cache,target=/path/to/cache-dir your-command
   #
   # build_opts+=('-v' '/var/cache/pkgfile:/var/cache/host-pkgfile:ro' '-v' '/var/cache/pacman:/var/cache/host-pacman:ro' '--no-cache')
-  build_opts+=('-v' '/var/cache/pkgfile:/var/cache/pkgfile' \
-    '-v' '/var/cache/pacman:/var/cache/pacman' \
-    '--no-cache')
-  set +x
-fi
-set +x
+  # build_opts+=('-v' '/var/cache/pkgfile:/var/cache/pkgfile' \
+  #   '-v' '/var/cache/pacman:/var/cache/pacman' \
+  #   '--no-cache')
 
-set -x
-docker build "${build_opts[@]}" -t "$1" .
-set +x
-
-if [ "$(uname)" != Linux ]; then
-  docker tag "$1":latest localhost/"$1":latest
-fi
-
-if [ "$1" = arch-all ]; then
   set -x
-  rm "$tar_image" || true
-  docker image save -o "$tar_image" localhost/arch-all
+  docker build "${build_opts[@]}" -t "$1" .
   set +x
-fi
+
+  if [ "$(uname)" != Linux ]; then
+    docker tag "$1":latest localhost/"$1":latest
+  fi
+)
